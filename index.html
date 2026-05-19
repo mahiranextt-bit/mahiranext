@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MAHIRANEXT TECHNOLOGIES | AI E-Commerce Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="top-bar">
+        <span><i class="fas fa-map-marker-alt"></i> 42/A, Cyber Heights, Bangalore - 560001</span>
+        <span><i class="fas fa-headset"></i> support@mahiranext.com | GST: 29AAHCM1234R1Z</span>
+    </div>
+
+    <nav class="navbar">
+        <div class="logo">
+            <h1>MAHIRANEXT</h1>
+            <p>TECHNOLOGIES • AI FIRST COMMERCE</p>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="active">Home</a>
+            <a href="#">Shop</a>
+            <a href="#">Solutions</a>
+            <a href="#">Contact</a>
+        </div>
+        <div class="nav-right">
+            <div class="profile-container">
+                <div class="user-icon" id="profileBtn"><i class="fas fa-user"></i></div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="dropdown-header" id="dropdownHeader">
+                        <h4>Guest User</h4>
+                        <p>Sign in for better experience</p>
+                    </div>
+                    <div class="dropdown-item" id="myOrdersBtn"><i class="fas fa-box"></i><span>My Orders</span></div>
+                    <div class="dropdown-item" id="myAddressesBtn"><i class="fas fa-map-marker-alt"></i><span>Saved
+                            Addresses</span></div>
+                    <div class="dropdown-item" id="languageBtn"><i class="fas fa-globe"></i><span>Change
+                            Language</span><span class="badge">English</span></div>
+                    <div class="dropdown-item" id="settingsBtn"><i class="fas fa-cog"></i><span>Account Settings</span>
+                    </div>
+                    <div class="dropdown-item" id="helpBtn"><i class="fas fa-headset"></i><span>Help Center</span></div>
+                    <div class="dropdown-item logout-item" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span>Sign
+                            Out</span></div>
+                </div>
+            </div>
+            <div class="cart-icon" id="cartIconBtn">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-text">
+            <div class="hero-badge"><i class="fas fa-microchip"></i> Next-Gen AI Store</div>
+            <h2>Smart Commerce <br> Evolved with AI</h2>
+            <p>Discover cutting‑edge tech accessories, AI tools, and enterprise gadgets.</p>
+            <button class="btn-primary" id="exploreBtn">Explore Products →</button>
+        </div>
+        <div style="font-size: 4rem;">
+            <i class="fas fa-robot" style="color:#2563eb;"></i>
+            <i class="fas fa-chart-line" style="color:#1e3c72;"></i>
+        </div>
+    </div>
+
+    <!-- Platform Services Section (Develop, Manage, Operate) -->
+    <div class="platform-showcase">
+        <h3><i class="fas fa-cogs"></i> Digital Platform Ecosystem</h3>
+        <div class="platform-grid">
+            <div class="platform-card"><i class="fas fa-code"></i>
+                <h4>Develop</h4>
+                <p>Custom software, AI apps & scalable platforms</p>
+            </div>
+            <div class="platform-card"><i class="fas fa-chalkboard-user"></i>
+                <h4>Manage</h4>
+                <p>24/7 platform governance & performance</p>
+            </div>
+            <div class="platform-card"><i class="fas fa-chart-line"></i>
+                <h4>Operate</h4>
+                <p>DevOps, cloud orchestration & reliability</p>
+            </div>
+            <div class="platform-card"><i class="fas fa-mobile-alt"></i>
+                <h4>Mobile & Web Apps</h4>
+                <p>Cross-platform native experiences</p>
+            </div>
+            <div class="platform-card"><i class="fas fa-microchip"></i>
+                <h4>AI Technology Services</h4>
+                <p>ML integration & intelligent automation</p>
+            </div>
+        </div>
+        <p class="platform-note"><i class="fas fa-check-circle"></i> MAHIRANEXT delivers end-to-end digital solutions —
+            from ideation to operations, powering next‑gen e‑commerce & enterprise ecosystems.</p>
+    </div>
+
+    <div class="business-card">
+        <div class="info-block">
+            <h4><i class="fas fa-building"></i> Owner</h4>
+            <p>Mr. Arjun Mehta (Founder & CEO)</p>
+        </div>
+        <div class="info-block">
+            <h4><i class="fas fa-id-card"></i> GST Details</h4>
+            <p>29AAHCM1234R1Z | PAN: AAHCM1234R</p>
+        </div>
+        <div class="info-block">
+            <h4><i class="fas fa-map-pin"></i> Registered Address</h4>
+            <p>42/A, Cyber Heights, Electronic City, Bengaluru - 560001</p>
+        </div>
+        <div class="info-block">
+            <h4><i class="fas fa-envelope"></i> Official Contact</h4>
+            <p>+91 98765 43210 | hello@mahiranext.com</p>
+        </div>
+        <div class="badge-pdf"><i class="fas fa-file-pdf"></i> Verified: MAHIRANEXT_Tech_Profile.pdf</div>
+    </div>
+
+    <section class="products-section" id="products">
+        <div class="section-header">
+            <div class="section-title">⚡ Trending AI & Tech Gear</div>
+            <span style="color:#2563eb;"><i class="fas fa-bolt"></i> 8 premium products</span>
+        </div>
+        <div class="products-grid" id="productsGrid"></div>
+    </section>
+
+    <footer>
+        <p>© 2025 MAHIRANEXT TECHNOLOGIES — Accelerating Digital Evolution.</p>
+        <p><i class="fas fa-shield-alt"></i> Secure checkout | AI driven recommendations</p>
+    </footer>
+
+    <!-- Cart Sidebar & Overlay -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header"><span><i class="fas fa-shopping-bag"></i> Your Cart</span><button class="close-cart"
+                id="closeCartBtn">&times;</button></div>
+        <div class="cart-items-list" id="cartItemsList">
+            <div style="text-align:center; padding:20px;">Cart is empty</div>
+        </div>
+        <div class="cart-total" id="cartTotalDisplay">Total: ₹0</div>
+        <button class="btn-primary" style="margin-top:16px; width:100%;" id="checkoutBtn">Proceed to Checkout</button>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="genericModal">
+        <div class="modal-content" id="genericModalContent"></div>
+    </div>
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content" id="modalContent"></div>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <div class="chat-toggle" id="chatToggleBtn"><i class="fas fa-comment-dots"></i></div>
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header"><span><i class="fas fa-robot"></i> MAHIRANEXT AI</span><i class="fas fa-times"
+                    id="closeChatBtn" style="cursor:pointer;"></i></div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="bot-msg">👋 Hello! I'm MAHIRANEXT assistant. Ask me about products, orders, or platform
+                    services!</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Ask me...">
+                <button id="sendChatBtn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
