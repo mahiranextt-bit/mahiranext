@@ -1,3 +1,4 @@
+// script.js
 const products = [
     { id: 1, name: "NeuraCore AI DevKit", price: 18999, icon: "fa-microchip", desc: "Edge AI module with NPU" },
     { id: 2, name: "QuantumSync Keyboard", price: 4999, icon: "fa-keyboard", desc: "Wireless mechanical RGB" },
@@ -14,7 +15,6 @@ let currentUser = null;
 let orders = [];
 let userAddresses = [];
 
-// Helper functions
 function getAddressKey() { return currentUser ? `mahiranext_addresses_${currentUser.email}` : null; }
 function loadAddressesForUser() { if (!currentUser) { userAddresses = []; return; } const stored = localStorage.getItem(getAddressKey()); userAddresses = stored ? JSON.parse(stored) : []; }
 function saveAddressesForUser() { if (currentUser) localStorage.setItem(getAddressKey(), JSON.stringify(userAddresses)); }
@@ -45,7 +45,6 @@ function updateAuthUI() {
     }
 }
 
-// MODAL: Authentication
 function showAuthModal() {
     const modal = document.getElementById('genericModal');
     const content = document.getElementById('genericModalContent');
@@ -103,7 +102,6 @@ function showAuthModal() {
     modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('open'); };
 }
 
-// ORDERS
 function showOrders() {
     if (!currentUser) { showToast("Please login first"); showAuthModal(); return; }
     const userOrders = orders.filter(o => o.userEmail === currentUser.email);
@@ -123,7 +121,6 @@ function showOrders() {
     modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('open'); };
 }
 
-// ADDRESSES
 function showAddressesModal() {
     if (!currentUser) { showToast("Login first"); showAuthModal(); return; }
     const render = () => {
@@ -188,7 +185,6 @@ function showAddressForm() {
     document.getElementById('cancelAddrBtn').onclick = () => { modal.classList.remove('open'); showAddressesModal(); };
 }
 
-// SETTINGS
 function showSettingsModal() {
     if (!currentUser) { showToast("Login required"); showAuthModal(); return; }
     const modal = document.getElementById('genericModal');
@@ -231,7 +227,6 @@ function showLanguageModal() {
     document.getElementById('closeLangBtn').onclick = () => modal.classList.remove('open');
 }
 
-// CART
 function updateCartUI() {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     document.getElementById('cartCount').innerText = totalItems;
@@ -278,7 +273,6 @@ function saveCart() { localStorage.setItem('mahiranext_cart', JSON.stringify(car
 function loadCart() { const saved = localStorage.getItem('mahiranext_cart'); if (saved) cart = JSON.parse(saved); updateCartUI(); }
 function getCartTotal() { return cart.reduce((sum, i) => sum + (i.price * i.quantity), 0); }
 
-// CHECKOUT
 function showCheckoutAddressSelection() {
     if (!currentUser) { showToast("Please login to checkout"); showAuthModal(); return; }
     const modal = document.getElementById('checkoutModal');
@@ -365,7 +359,7 @@ function processOrderFinal() {
     `;
     document.getElementById('downloadInvoiceBtn').onclick = () => {
         const itemsText = cart.map(i => `${i.name} x${i.quantity} = ₹${(i.price * i.quantity).toLocaleString('en-IN')}`).join('\n');
-        const invoice = `MAHIRANEXT TECHNOLOGIES\nGST: 29AAHCM1234R1Z\nOrder: ${orderId}\nDate: ${new Date().toLocaleString()}\nItems:\n${itemsText}\nTotal: ₹${total.toLocaleString('en-IN')}\nAddress: ${addressStr}\nThank you!`;
+        const invoice = `MAHIRANEXT TECHNOLOGIES\nGST: 36AAUCM4940Q1ZH\nOrder: ${orderId}\nDate: ${new Date().toLocaleString()}\nItems:\n${itemsText}\nTotal: ₹${total.toLocaleString('en-IN')}\nAddress: ${addressStr}\nThank you!`;
         const blob = new Blob([invoice], { type: 'text/plain' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
@@ -383,7 +377,6 @@ function processOrderFinal() {
     };
 }
 
-// PRODUCT RENDER
 function renderProducts() {
     const grid = document.getElementById('productsGrid');
     grid.innerHTML = '';
@@ -408,7 +401,7 @@ function renderProducts() {
     });
 }
 
-// EVENT LISTENERS & INIT
+// Event listeners
 document.getElementById('cartIconBtn').addEventListener('click', () => document.getElementById('cartSidebar').classList.add('open'));
 document.getElementById('closeCartBtn').addEventListener('click', () => document.getElementById('cartSidebar').classList.remove('open'));
 document.getElementById('cartOverlay').addEventListener('click', () => document.getElementById('cartSidebar').classList.remove('open'));
@@ -419,11 +412,11 @@ document.getElementById('myOrdersBtn').onclick = () => { showOrders(); document.
 document.getElementById('myAddressesBtn').onclick = () => { showAddressesModal(); document.getElementById('profileDropdown').classList.remove('open'); };
 document.getElementById('languageBtn').onclick = () => { showLanguageModal(); document.getElementById('profileDropdown').classList.remove('open'); };
 document.getElementById('settingsBtn').onclick = () => { showSettingsModal(); document.getElementById('profileDropdown').classList.remove('open'); };
-document.getElementById('helpBtn').onclick = () => { showToast("📞 Contact support: hello@mahiranext.com"); document.getElementById('profileDropdown').classList.remove('open'); };
+document.getElementById('helpBtn').onclick = () => { showToast("📞 Support: +91 8977604602 | mahiranextt@gmail.com"); document.getElementById('profileDropdown').classList.remove('open'); };
 document.getElementById('logoutBtn').onclick = () => { currentUser = null; userAddresses = []; localStorage.removeItem('mahiranext_user'); updateAuthUI(); showToast("Logged out"); document.getElementById('profileDropdown').classList.remove('open'); };
 document.getElementById('exploreBtn').addEventListener('click', () => { document.getElementById('products').scrollIntoView({ behavior: 'smooth' }); });
 
-// CHATBOT
+// Chatbot
 const chatToggle = document.getElementById('chatToggleBtn'), chatWindow = document.getElementById('chatWindow'), closeChat = document.getElementById('closeChatBtn'), sendBtn = document.getElementById('sendChatBtn'), chatInput = document.getElementById('chatInput'), chatMessages = document.getElementById('chatMessages');
 function addBotMsg(text) { const div = document.createElement('div'); div.className = 'bot-msg'; div.innerHTML = `<i class="fas fa-robot"></i> ${text}`; chatMessages.appendChild(div); chatMessages.scrollTop = chatMessages.scrollHeight; }
 function addUserMsg(text) { const div = document.createElement('div'); div.className = 'user-msg'; div.innerText = text; chatMessages.appendChild(div); chatMessages.scrollTop = chatMessages.scrollHeight; }
@@ -442,7 +435,7 @@ closeChat.addEventListener('click', () => chatWindow.classList.remove('open-chat
 sendBtn.addEventListener('click', sendChatMessage);
 chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendChatMessage(); });
 
-// INIT
+// Initialization
 renderProducts();
 loadCart();
 loadData();
