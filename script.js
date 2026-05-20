@@ -1,4 +1,4 @@
-// script.js
+// script.js - Complete
 const products = [
     { id: 1, name: "NeuraCore AI DevKit", price: 18999, icon: "fa-microchip", desc: "Edge AI module with NPU" },
     { id: 2, name: "QuantumSync Keyboard", price: 4999, icon: "fa-keyboard", desc: "Wireless mechanical RGB" },
@@ -15,6 +15,7 @@ let currentUser = null;
 let orders = [];
 let userAddresses = [];
 
+// Helper functions
 function getAddressKey() { return currentUser ? `mahiranext_addresses_${currentUser.email}` : null; }
 function loadAddressesForUser() { if (!currentUser) { userAddresses = []; return; } const stored = localStorage.getItem(getAddressKey()); userAddresses = stored ? JSON.parse(stored) : []; }
 function saveAddressesForUser() { if (currentUser) localStorage.setItem(getAddressKey(), JSON.stringify(userAddresses)); }
@@ -45,6 +46,7 @@ function updateAuthUI() {
     }
 }
 
+// MODAL: Authentication
 function showAuthModal() {
     const modal = document.getElementById('genericModal');
     const content = document.getElementById('genericModalContent');
@@ -102,6 +104,7 @@ function showAuthModal() {
     modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('open'); };
 }
 
+// ORDERS
 function showOrders() {
     if (!currentUser) { showToast("Please login first"); showAuthModal(); return; }
     const userOrders = orders.filter(o => o.userEmail === currentUser.email);
@@ -121,6 +124,7 @@ function showOrders() {
     modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('open'); };
 }
 
+// ADDRESSES
 function showAddressesModal() {
     if (!currentUser) { showToast("Login first"); showAuthModal(); return; }
     const render = () => {
@@ -185,6 +189,7 @@ function showAddressForm() {
     document.getElementById('cancelAddrBtn').onclick = () => { modal.classList.remove('open'); showAddressesModal(); };
 }
 
+// SETTINGS
 function showSettingsModal() {
     if (!currentUser) { showToast("Login required"); showAuthModal(); return; }
     const modal = document.getElementById('genericModal');
@@ -227,6 +232,7 @@ function showLanguageModal() {
     document.getElementById('closeLangBtn').onclick = () => modal.classList.remove('open');
 }
 
+// CART
 function updateCartUI() {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     document.getElementById('cartCount').innerText = totalItems;
@@ -273,6 +279,7 @@ function saveCart() { localStorage.setItem('mahiranext_cart', JSON.stringify(car
 function loadCart() { const saved = localStorage.getItem('mahiranext_cart'); if (saved) cart = JSON.parse(saved); updateCartUI(); }
 function getCartTotal() { return cart.reduce((sum, i) => sum + (i.price * i.quantity), 0); }
 
+// CHECKOUT
 function showCheckoutAddressSelection() {
     if (!currentUser) { showToast("Please login to checkout"); showAuthModal(); return; }
     const modal = document.getElementById('checkoutModal');
@@ -377,6 +384,7 @@ function processOrderFinal() {
     };
 }
 
+// PRODUCT RENDER
 function renderProducts() {
     const grid = document.getElementById('productsGrid');
     grid.innerHTML = '';
@@ -401,6 +409,52 @@ function renderProducts() {
     });
 }
 
+// Navigation
+function scrollToSection(elementId, offset = 80) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - offset;
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }
+}
+
+function setActiveLink() {
+    const sections = ['homeSection', 'platformSection', 'productsSection', 'contactSection'];
+    const scrollPos = window.scrollY + 100;
+    let activeId = 'homeLink';
+    for (let section of sections) {
+        const el = document.getElementById(section);
+        if (el && el.offsetTop <= scrollPos) {
+            activeId = section === 'homeSection' ? 'homeLink' :
+                section === 'platformSection' ? 'solutionsLink' :
+                    section === 'productsSection' ? 'shopLink' : 'contactLink';
+        }
+    }
+    document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
+    const activeLink = document.getElementById(activeId);
+    if (activeLink) activeLink.classList.add('active');
+}
+
+document.getElementById('homeLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    scrollToSection('homeSection', 70);
+});
+document.getElementById('shopLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    scrollToSection('productsSection', 70);
+});
+document.getElementById('solutionsLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    scrollToSection('platformSection', 70);
+});
+document.getElementById('contactLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    scrollToSection('contactSection', 70);
+});
+
+window.addEventListener('scroll', setActiveLink);
+
 // Event listeners
 document.getElementById('cartIconBtn').addEventListener('click', () => document.getElementById('cartSidebar').classList.add('open'));
 document.getElementById('closeCartBtn').addEventListener('click', () => document.getElementById('cartSidebar').classList.remove('open'));
@@ -414,28 +468,332 @@ document.getElementById('languageBtn').onclick = () => { showLanguageModal(); do
 document.getElementById('settingsBtn').onclick = () => { showSettingsModal(); document.getElementById('profileDropdown').classList.remove('open'); };
 document.getElementById('helpBtn').onclick = () => { showToast("📞 Support: +91 8977604602 | mahiranextt@gmail.com"); document.getElementById('profileDropdown').classList.remove('open'); };
 document.getElementById('logoutBtn').onclick = () => { currentUser = null; userAddresses = []; localStorage.removeItem('mahiranext_user'); updateAuthUI(); showToast("Logged out"); document.getElementById('profileDropdown').classList.remove('open'); };
-document.getElementById('exploreBtn').addEventListener('click', () => { document.getElementById('products').scrollIntoView({ behavior: 'smooth' }); });
+document.getElementById('exploreBtn').addEventListener('click', () => { scrollToSection('productsSection', 70); });
 
-// Chatbot
-const chatToggle = document.getElementById('chatToggleBtn'), chatWindow = document.getElementById('chatWindow'), closeChat = document.getElementById('closeChatBtn'), sendBtn = document.getElementById('sendChatBtn'), chatInput = document.getElementById('chatInput'), chatMessages = document.getElementById('chatMessages');
-function addBotMsg(text) { const div = document.createElement('div'); div.className = 'bot-msg'; div.innerHTML = `<i class="fas fa-robot"></i> ${text}`; chatMessages.appendChild(div); chatMessages.scrollTop = chatMessages.scrollHeight; }
-function addUserMsg(text) { const div = document.createElement('div'); div.className = 'user-msg'; div.innerText = text; chatMessages.appendChild(div); chatMessages.scrollTop = chatMessages.scrollHeight; }
-function processChat(msg) {
-    const lower = msg.toLowerCase();
-    if (lower.includes('product')) addBotMsg(`We offer ${products.length} AI products: ${products.map(p => p.name).join(', ')}. Type product name for price!`);
-    else if (lower.includes('order')) addBotMsg(currentUser ? "Check 'My Orders' in profile for your order history." : "Please login to see your orders.");
-    else if (lower.includes('address')) addBotMsg("Manage your saved addresses in profile → Saved Addresses.");
-    else if (lower.includes('cod') || lower.includes('payment')) addBotMsg("We support Cash on Delivery (COD) for all orders.");
-    else if (lower.includes('platform') || lower.includes('develop') || lower.includes('manage') || lower.includes('operate')) addBotMsg("MAHIRANEXT develops, manages & operates AI-first digital platforms, mobile apps, and enterprise software.");
-    else addBotMsg("I can help with products, orders, addresses, COD checkout, or platform services!");
+// ====================
+// ENHANCED CHATBOT
+// ====================
+const chatToggle = document.getElementById('chatToggleBtn');
+const chatWindow = document.getElementById('chatWindow');
+const closeChatBtn = document.getElementById('closeChatBtn');
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendChatBtn');
+const chatOptionsDiv = document.getElementById('chatOptions');
+
+const quickOptions = [
+    { text: "📦 Products", value: "products", icon: "fa-box" },
+    { text: "📋 My Orders", value: "orders", icon: "fa-truck" },
+    { text: "📍 Address", value: "address", icon: "fa-map-marker-alt" },
+    { text: "💳 Payment", value: "payment", icon: "fa-credit-card" },
+    { text: "⚙️ Platform Services", value: "platform", icon: "fa-cogs" }
+];
+
+let isTyping = false;
+
+function addBotMessage(text, showOptions = false) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'bot-msg';
+    msgDiv.innerHTML = `<i class="fas fa-robot"></i> ${text}`;
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    if (showOptions) setTimeout(() => showQuickOptions(), 300);
 }
-function sendChatMessage() { const msg = chatInput.value.trim(); if (!msg) return; addUserMsg(msg); chatInput.value = ''; setTimeout(() => processChat(msg), 200); }
-chatToggle.addEventListener('click', () => chatWindow.classList.toggle('open-chat'));
-closeChat.addEventListener('click', () => chatWindow.classList.remove('open-chat'));
+
+function addUserMessage(text) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'user-msg';
+    msgDiv.innerText = text;
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function showTypingIndicator() {
+    if (isTyping) return;
+    isTyping = true;
+    const indicator = document.createElement('div');
+    indicator.className = 'typing-indicator';
+    indicator.id = 'typingIndicator';
+    indicator.innerHTML = '<span></span><span></span><span></span>';
+    chatMessages.appendChild(indicator);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function hideTypingIndicator() {
+    const indicator = document.getElementById('typingIndicator');
+    if (indicator) indicator.remove();
+    isTyping = false;
+}
+
+function showQuickOptions() {
+    chatOptionsDiv.innerHTML = '';
+    quickOptions.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerHTML = `<i class="fas ${opt.icon}"></i> ${opt.text}`;
+        btn.onclick = () => {
+            addUserMessage(opt.text);
+            chatOptionsDiv.style.display = 'none';
+            handleChatResponse(opt.value);
+        };
+        chatOptionsDiv.appendChild(btn);
+    });
+    chatOptionsDiv.style.display = 'flex';
+}
+
+function handleChatResponse(topic) {
+    showTypingIndicator();
+    setTimeout(() => {
+        hideTypingIndicator();
+        let reply = "";
+        switch (topic) {
+            case "products":
+                reply = `We offer ${products.length} premium AI & tech products: ${products.map(p => p.name).join(", ")}. Would you like me to show prices?`;
+                addBotMessage(reply);
+                setTimeout(() => {
+                    chatOptionsDiv.innerHTML = '';
+                    const priceBtn = document.createElement('button');
+                    priceBtn.className = 'option-btn';
+                    priceBtn.innerHTML = '<i class="fas fa-tag"></i> Show Prices';
+                    priceBtn.onclick = () => {
+                        addUserMessage("Show Prices");
+                        showTypingIndicator();
+                        setTimeout(() => {
+                            hideTypingIndicator();
+                            const priceList = products.map(p => `${p.name}: ₹${p.price.toLocaleString('en-IN')}`).join('\n');
+                            addBotMessage(priceList);
+                        }, 500);
+                    };
+                    chatOptionsDiv.appendChild(priceBtn);
+                    chatOptionsDiv.style.display = 'flex';
+                }, 300);
+                break;
+            case "orders":
+                if (currentUser) reply = "You can view your past orders by clicking 'My Orders' in the profile menu. Would you like me to open it?";
+                else reply = "Please login to view your orders. I can help you with the login process.";
+                addBotMessage(reply);
+                if (currentUser) {
+                    setTimeout(() => {
+                        chatOptionsDiv.innerHTML = '';
+                        const openOrders = document.createElement('button');
+                        openOrders.className = 'option-btn';
+                        openOrders.innerHTML = '<i class="fas fa-box"></i> Open My Orders';
+                        openOrders.onclick = () => { showOrders(); chatOptionsDiv.style.display = 'none'; };
+                        chatOptionsDiv.appendChild(openOrders);
+                        chatOptionsDiv.style.display = 'flex';
+                    }, 500);
+                } else {
+                    setTimeout(() => {
+                        chatOptionsDiv.innerHTML = '';
+                        const loginBtn = document.createElement('button');
+                        loginBtn.className = 'option-btn';
+                        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login Now';
+                        loginBtn.onclick = () => { showAuthModal(); chatOptionsDiv.style.display = 'none'; };
+                        chatOptionsDiv.appendChild(loginBtn);
+                        chatOptionsDiv.style.display = 'flex';
+                    }, 500);
+                }
+                break;
+            case "address":
+                if (currentUser) reply = "You can manage your saved addresses in the profile → Saved Addresses. Need to add a new one?";
+                else reply = "Please login first to manage your addresses.";
+                addBotMessage(reply);
+                if (currentUser) {
+                    setTimeout(() => {
+                        chatOptionsDiv.innerHTML = '';
+                        const addrBtn = document.createElement('button');
+                        addrBtn.className = 'option-btn';
+                        addrBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i> Manage Addresses';
+                        addrBtn.onclick = () => { showAddressesModal(); chatOptionsDiv.style.display = 'none'; };
+                        chatOptionsDiv.appendChild(addrBtn);
+                        chatOptionsDiv.style.display = 'flex';
+                    }, 500);
+                }
+                break;
+            case "payment":
+                reply = "We support Cash on Delivery (COD) for all orders. UPI and card payments coming soon!";
+                addBotMessage(reply);
+                break;
+            case "platform":
+                reply = "MAHIRANEXT offers: Develop (custom software), Manage (24/7 governance), Operate (DevOps), Mobile/Web Apps, and AI services. Click on any card above to learn more!";
+                addBotMessage(reply);
+                break;
+            default:
+                reply = "I can help with products, orders, addresses, payments, or platform services. Select an option below or type your question!";
+                addBotMessage(reply, true);
+        }
+    }, 800);
+}
+
+function processUserMessage(msg) {
+    const lower = msg.toLowerCase().trim();
+    if (lower === "hi" || lower === "hello" || lower === "hey") {
+        addBotMessage("Hello! 👋 How can I assist you today?", true);
+    }
+    else if (lower.includes("product") || lower.includes("price") || lower.includes("device")) {
+        handleChatResponse("products");
+    }
+    else if (lower.includes("order")) {
+        handleChatResponse("orders");
+    }
+    else if (lower.includes("address")) {
+        handleChatResponse("address");
+    }
+    else if (lower.includes("payment") || lower.includes("cod")) {
+        handleChatResponse("payment");
+    }
+    else if (lower.includes("platform") || lower.includes("develop") || lower.includes("manage") || lower.includes("operate") || lower.includes("ai service")) {
+        handleChatResponse("platform");
+    }
+    else {
+        addBotMessage("I'm not sure about that. Please select one of the options below or ask about products, orders, addresses, payment, or platform services.", true);
+    }
+}
+
+function sendChatMessage() {
+    const msg = chatInput.value.trim();
+    if (!msg) return;
+    addUserMessage(msg);
+    chatInput.value = '';
+    chatOptionsDiv.style.display = 'none';
+    processUserMessage(msg);
+}
+
+function openChat() {
+    chatWindow.classList.add('open-chat');
+    const lastMsg = chatMessages.lastElementChild;
+    if (lastMsg && lastMsg.classList.contains('bot-msg') && lastMsg.innerText.includes("Hello! I'm MAHIRANEXT assistant")) {
+        showQuickOptions();
+    } else {
+        if (chatOptionsDiv.style.display !== 'flex') showQuickOptions();
+    }
+}
+
+chatToggle.addEventListener('click', openChat);
+closeChatBtn.addEventListener('click', () => {
+    chatWindow.classList.remove('open-chat');
+    chatOptionsDiv.style.display = 'none';
+});
 sendBtn.addEventListener('click', sendChatMessage);
 chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendChatMessage(); });
 
-// Initialization
-renderProducts();
-loadCart();
-loadData();
+// ====================
+// DIGITAL PLATFORM ECOSYSTEM - INTERACTIVE DETAILS
+// ====================
+const platformGridElem = document.getElementById('platformGrid');
+const platformDetailsDiv = document.getElementById('platformDetails');
+const detailsContent = document.getElementById('detailsContent');
+const backBtn = document.getElementById('backToPlatformBtn');
+
+const serviceDetails = {
+    develop: {
+        title: "Develop – Custom Software & AI Apps",
+        badge: "End-to-End Development",
+        description: "We build scalable, future-ready digital platforms tailored to your business needs. Our development process combines agile methodologies with cutting-edge technologies to deliver high-performance solutions.",
+        uses: [
+            "Custom enterprise software (ERP, CRM, SCM)",
+            "AI-powered web & mobile applications",
+            "Scalable e‑commerce platforms",
+            "API-first microservices architecture",
+            "Real-time data processing systems"
+        ],
+        process: "1. Discovery & Requirement Analysis → 2. UI/UX Design → 3. Agile Development (sprints) → 4. QA & Security Testing → 5. Deployment & CI/CD → 6. Post-launch Support"
+    },
+    manage: {
+        title: "Manage – 24/7 Platform Governance",
+        badge: "Operational Excellence",
+        description: "We ensure your digital assets run smoothly with proactive monitoring, governance frameworks, and performance optimization. Our management services reduce downtime and improve user satisfaction.",
+        uses: [
+            "Platform health monitoring & alerting",
+            "Security & compliance management",
+            "User access control & role governance",
+            "Database & server optimization",
+            "SLA-driven incident response"
+        ],
+        process: "1. Infrastructure Audit → 2. Implement Monitoring Stack → 3. Define Governance Policies → 4. Automated Backups & DR → 5. Continuous Performance Tuning → 6. Monthly Reporting"
+    },
+    operate: {
+        title: "Operate – DevOps & Cloud Orchestration",
+        badge: "Reliability at Scale",
+        description: "We operate your infrastructure with industry‑best DevOps practices, ensuring high availability, auto‑scaling, and cost efficiency across AWS, Azure, or GCP.",
+        uses: [
+            "Kubernetes & container orchestration",
+            "Infrastructure as Code (Terraform)",
+            "Automated CI/CD pipelines",
+            "Cloud cost optimization",
+            "Disaster recovery automation"
+        ],
+        process: "1. Cloud Assessment → 2. Architecture Design → 3. Setup CI/CD & IaC → 4. Security Hardening → 5. 24/7 SRE Support → 6. Regular Load Testing"
+    },
+    mobile: {
+        title: "Mobile & Web Apps – Cross-Platform Experiences",
+        badge: "Native & Hybrid Excellence",
+        description: "We develop high‑performance mobile and web applications that work seamlessly across iOS, Android, and modern browsers, using React Native, Flutter, or PWA technologies.",
+        uses: [
+            "Consumer apps (iOS/Android)",
+            "Progressive Web Apps (PWA)",
+            "Cross‑platform business dashboards",
+            "Offline‑first mobile experiences",
+            "App store deployment & maintenance"
+        ],
+        process: "1. User Journey Mapping → 2. Prototyping → 3. Native/Hybrid Development → 4. Beta Testing (TestFlight/Internal) → 5. App Store Submission → 6. Post‑Launch Analytics"
+    },
+    ai: {
+        title: "AI Technology Services – ML Integration & Automation",
+        badge: "Intelligent Solutions",
+        description: "We embed artificial intelligence into your workflows, from predictive analytics to natural language processing, helping you make data‑driven decisions and automate complex tasks.",
+        uses: [
+            "Custom LLM integration (chatbots, search)",
+            "Computer vision for quality inspection",
+            "Recommendation engines (e‑commerce)",
+            "Predictive maintenance & forecasting",
+            "Sentiment analysis & customer insight"
+        ],
+        process: "1. Data Collection & Cleaning → 2. Model Selection & Training → 3. Validation & Testing → 4. Deployment (Edge/Cloud) → 5. Continuous Learning (MLOps) → 6. Business Impact Analysis"
+    }
+};
+
+function showServiceDetails(serviceKey) {
+    const data = serviceDetails[serviceKey];
+    if (!data) return;
+    detailsContent.innerHTML = `
+        <div class="details-badge"><i class="fas fa-info-circle"></i> ${data.badge}</div>
+        <h2>${data.title}</h2>
+        <p>${data.description}</p>
+        <h3><i class="fas fa-check-circle"></i> Key Uses</h3>
+        <ul>${data.uses.map(use => `<li><i class="fas fa-angle-right"></i> ${use}</li>`).join('')}</ul>
+        <h3><i class="fas fa-cogs"></i> Our Making Process</h3>
+        <p>${data.process}</p>
+        <div style="background:#f8fafc; padding:20px; border-radius:24px; margin-top:20px;">
+            <i class="fas fa-clock"></i> <strong>Typical timeline:</strong> 4–8 weeks (depends on complexity)<br>
+            <i class="fas fa-users"></i> <strong>Team involved:</strong> Product Manager, Developers, QA, DevOps
+        </div>
+    `;
+    platformGridElem.style.display = 'none';
+    platformDetailsDiv.style.display = 'block';
+    document.getElementById('platformSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function backToPlatformGrid() {
+    platformGridElem.style.display = 'flex';
+    platformDetailsDiv.style.display = 'none';
+}
+
+document.querySelectorAll('.platform-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+        const service = card.getAttribute('data-service');
+        if (service) showServiceDetails(service);
+    });
+});
+
+backBtn.addEventListener('click', backToPlatformGrid);
+
+// INITIALIZATION
+window.addEventListener('load', () => {
+    platformGridElem.style.display = 'flex';
+    platformDetailsDiv.style.display = 'none';
+    renderProducts();
+    loadCart();
+    loadData();
+    setActiveLink();
+});
