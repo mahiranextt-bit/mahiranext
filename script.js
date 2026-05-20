@@ -1,4 +1,4 @@
-// script.js - Complete
+
 const products = [
     { id: 1, name: "NeuraCore AI DevKit", price: 18999, icon: "fa-microchip", desc: "Edge AI module with NPU" },
     { id: 2, name: "QuantumSync Keyboard", price: 4999, icon: "fa-keyboard", desc: "Wireless mechanical RGB" },
